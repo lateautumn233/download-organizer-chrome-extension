@@ -23,6 +23,7 @@ $Excludes = @(
     'package-extension.sh',
     'package-extension.ps1',
     'AGENTS.md'
+    '.gitignore'
 )
 
 $Entries = Get-ChildItem -Force | Where-Object { $Excludes -notcontains $_.Name }
