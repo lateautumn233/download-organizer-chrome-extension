@@ -3,15 +3,16 @@ import moment from './js/moment-es.js';
 const RULE_FIELDS = ['mime', 'referrer', 'url', 'finalUrl', 'filename'];
 
 const DEFAULT_RULES = [
-    { "description": "Windows installers and applications (.exe and .msi files)", "mime": "application/(x-msdownload|x-ms-installer|x-msi|exe)", "pattern": "installers/", "enabled": true },
-    { "description": "Linux installers (.deb and .rpm files)", "mime": "application/(x-debian-package|x-redhat-package-manager|x-rpm)", "pattern": "installers/", "enabled": true },
-    { "description": "Mac installers (.dmg files)", "mime": "application/x-apple-diskimage", "pattern": "installers/", "enabled": true },
-    { "description": "Zip and GZip archives", "mime": "application/(zip|gzip|x-gzip)", "pattern": "archives/", "enabled": true },
-    { "description": "Pictures", "mime": "image/.*", "pattern": "images/", "enabled": true },
-    { "description": "Torrents", "mime": "application/x-bittorrent", "pattern": "torrents/", "enabled": true },
-    { "description": "Organize downloads by domain-named folders", "pattern": "site/${referrer:1}/", "referrer": ".+?://([^/]+)/.*", "enabled": false },
-    { "description": "Organize everything else by date", "mime": ".*", "pattern": "other/${date:YYYY-MM-DD}/", "enabled": false }
-];
+    { "description": "Windows installers (.exe and .msi files)", "enabled": true, "filename": ".*(setup|install|installer).*", "mime": "application/(x-msdownload|x-ms-installer|x-msi|exe|x-msdos-program)", "pattern": "installers/" },
+    { "description": "Windows applications (.exe and .msi files)", "enabled": true, "mime": "application/(x-msdownload|x-ms-installer|x-msi|exe|x-msdos-program)", "pattern": "programs/" },
+    { "description": "Linux installers (.deb and .rpm files)", "enabled": true, "mime": "application/(x-debian-package|x-redhat-package-manager|x-rpm)", "pattern": "installers/" },
+    { "description": "Mac installers (.dmg files)", "enabled": true, "mime": "application/x-apple-diskimage", "pattern": "installers/" },
+    { "description": "Zip and GZip archives", "enabled": true, "mime": "application/(zip|gzip|x-gzip)", "pattern": "archives/" },
+    { "description": "Pictures", "enabled": true, "mime": "image/.*", "pattern": "images/" },
+    { "description": "Torrents", "enabled": true, "mime": "application/x-bittorrent", "pattern": "torrents/" },
+    { "description": "Organize downloads by domain-named folders", "enabled": false, "pattern": "site/${referrer:1}/", "referrer": ".+?://([^/]+)/.*" },
+    { "description": "Organize everything else by date", "enabled": false, "mime": ".*", "pattern": "other/${date:YYYY-MM-DD}/" }
+ ];
 
 const DEFAULT_BLOCKLIST = [];
 
