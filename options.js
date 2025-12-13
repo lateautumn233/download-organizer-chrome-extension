@@ -15,6 +15,36 @@ const DEFAULT_RULES = [
 
 const DEFAULT_BLOCKLIST = [];
 
+function applyI18n() {
+    // 翻译带有data-i18n属性的元素
+    document.querySelectorAll('[data-i18n]').forEach(element => {
+        const key = element.getAttribute('data-i18n');
+        const translatedText = chrome.i18n.getMessage(key);
+        if (translatedText) {
+            // 使用 innerHTML 以便消息中可以包含代码标签、链接及简单 HTML
+            element.innerHTML = translatedText;
+        }
+    });
+    
+    // 翻译带有data-i18n-placeholder属性的元素的占位符
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(element => {
+        const key = element.getAttribute('data-i18n-placeholder');
+        const translatedText = chrome.i18n.getMessage(key);
+        if (translatedText) {
+            element.setAttribute('placeholder', translatedText);
+        }
+    });
+    
+    // 翻译带有data-i18n-title属性的元素的title
+    document.querySelectorAll('[data-i18n-title]').forEach(element => {
+        const key = element.getAttribute('data-i18n-title');
+        const translatedText = chrome.i18n.getMessage(key);
+        if (translatedText) {
+            element.setAttribute('title', translatedText);
+        }
+    });
+}
+
 function sanitizeBlocklist(list) {
     if (!Array.isArray(list)) {
         return [];
@@ -141,7 +171,8 @@ async function renderRules(openIdx) {
         // last item
         $('button.down', $rule).toggleClass('disabled', idx + 1 == rulesets.length);
 
-        $('input', $rule).tooltip();
+        // 为所有带有data-toggle="tooltip"的元素初始化tooltip，包括input和label
+        $rule.find('[data-toggle="tooltip"]').tooltip();
 
         for (var field in ruleset) {
             var element = $('input[data-field="' + field + '"],select[data-field="' + field + '"]', $rule);
@@ -216,6 +247,9 @@ async function renderRules(openIdx) {
         });
 
         $rulesContainer.append($rule);
+        
+        // 对新添加的规则元素应用国际化翻译
+        applyI18n();
     });
 
     rulesets.every(rule => {
@@ -235,6 +269,9 @@ function showRuleShareModal(rule) {
 }
 
 $(function () {
+    // 应用国际化翻译
+    applyI18n();
+    
     ///// Buttons
     // add rule button
     $('#add-rule-btn').click(function () {
@@ -242,7 +279,7 @@ $(function () {
         renderRules(0);
     });
     // export rules
-    $('#export-rules-btn').click(function () {
+    $('#export-to-file-btn').click(function () {
         var pom = document.createElement('a');
         pom.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(JSON.stringify(rulesets, null, '  ')));
         pom.setAttribute('download', 'download_rules.json');
